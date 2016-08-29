@@ -1,0 +1,397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TSPPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="Id_Location" />
+          </Key>
+          <Property Name="Id_Location" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="Id_News" />
+          </Key>
+          <Property Name="Id_News" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Headline" Type="varchar" MaxLength="1000" />
+          <Property Name="Content" Type="nvarchar" MaxLength="3000" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Refugee">
+          <Key>
+            <PropertyRef Name="Id_Refugee" />
+          </Key>
+          <Property Name="Id_Refugee" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Id_Location" Type="int" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RefugeeNeedWhatHelps">
+          <Key>
+            <PropertyRef Name="Id_Refugee" />
+            <PropertyRef Name="Id_What_helps" />
+          </Key>
+          <Property Name="Id_Refugee" Type="int" Nullable="false" />
+          <Property Name="Id_What_helps" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Volunteer">
+          <Key>
+            <PropertyRef Name="Id_Volunteer" />
+          </Key>
+          <Property Name="Id_Volunteer" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Id_Location" Type="int" />
+          <Property Name="Image" Type="image" />
+          <Property Name="Phone" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Rating" Type="float" />
+          <Property Name="Number_of_rating" Type="int" />
+        </EntityType>
+        <EntityType Name="VolunteerWhatHelps">
+          <Key>
+            <PropertyRef Name="Id_Volunteer" />
+            <PropertyRef Name="Id_What_helps" />
+          </Key>
+          <Property Name="Id_Volunteer" Type="int" Nullable="false" />
+          <Property Name="Id_What_helps" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="What_helps">
+          <Key>
+            <PropertyRef Name="Id_What_helps" />
+          </Key>
+          <Property Name="Id_What_helps" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Type_of_help" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Refugee_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Refugee" Type="Self.Refugee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id_Location" />
+            </Principal>
+            <Dependent Role="Refugee">
+              <PropertyRef Name="Id_Location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RefugeeNeedWhatHelps_Refugee">
+          <End Role="Refugee" Type="Self.Refugee" Multiplicity="1" />
+          <End Role="RefugeeNeedWhatHelps" Type="Self.RefugeeNeedWhatHelps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Refugee">
+              <PropertyRef Name="Id_Refugee" />
+            </Principal>
+            <Dependent Role="RefugeeNeedWhatHelps">
+              <PropertyRef Name="Id_Refugee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RefugeeNeedWhatHelps_WhatHelps">
+          <End Role="What_helps" Type="Self.What_helps" Multiplicity="1" />
+          <End Role="RefugeeNeedWhatHelps" Type="Self.RefugeeNeedWhatHelps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="What_helps">
+              <PropertyRef Name="Id_What_helps" />
+            </Principal>
+            <Dependent Role="RefugeeNeedWhatHelps">
+              <PropertyRef Name="Id_What_helps" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Volunteer_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
+          <End Role="Volunteer" Type="Self.Volunteer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id_Location" />
+            </Principal>
+            <Dependent Role="Volunteer">
+              <PropertyRef Name="Id_Location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerWhatHelps_Volunteer">
+          <End Role="Volunteer" Type="Self.Volunteer" Multiplicity="1" />
+          <End Role="VolunteerWhatHelps" Type="Self.VolunteerWhatHelps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Volunteer">
+              <PropertyRef Name="Id_Volunteer" />
+            </Principal>
+            <Dependent Role="VolunteerWhatHelps">
+              <PropertyRef Name="Id_Volunteer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerWhatHelps_WhatHelps">
+          <End Role="What_helps" Type="Self.What_helps" Multiplicity="1" />
+          <End Role="VolunteerWhatHelps" Type="Self.VolunteerWhatHelps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="What_helps">
+              <PropertyRef Name="Id_What_helps" />
+            </Principal>
+            <Dependent Role="VolunteerWhatHelps">
+              <PropertyRef Name="Id_What_helps" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TSPPModelStoreContainer">
+          <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Refugee" EntityType="Self.Refugee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RefugeeNeedWhatHelps" EntityType="Self.RefugeeNeedWhatHelps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Volunteer" EntityType="Self.Volunteer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VolunteerWhatHelps" EntityType="Self.VolunteerWhatHelps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="What_helps" EntityType="Self.What_helps" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Refugee_Location" Association="Self.FK_Refugee_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Refugee" EntitySet="Refugee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RefugeeNeedWhatHelps_Refugee" Association="Self.FK_RefugeeNeedWhatHelps_Refugee">
+            <End Role="Refugee" EntitySet="Refugee" />
+            <End Role="RefugeeNeedWhatHelps" EntitySet="RefugeeNeedWhatHelps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RefugeeNeedWhatHelps_WhatHelps" Association="Self.FK_RefugeeNeedWhatHelps_WhatHelps">
+            <End Role="What_helps" EntitySet="What_helps" />
+            <End Role="RefugeeNeedWhatHelps" EntitySet="RefugeeNeedWhatHelps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Volunteer_Location" Association="Self.FK_Volunteer_Location">
+            <End Role="Location" EntitySet="Location" />
+            <End Role="Volunteer" EntitySet="Volunteer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerWhatHelps_Volunteer" Association="Self.FK_VolunteerWhatHelps_Volunteer">
+            <End Role="Volunteer" EntitySet="Volunteer" />
+            <End Role="VolunteerWhatHelps" EntitySet="VolunteerWhatHelps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerWhatHelps_WhatHelps" Association="Self.FK_VolunteerWhatHelps_WhatHelps">
+            <End Role="What_helps" EntitySet="What_helps" />
+            <End Role="VolunteerWhatHelps" EntitySet="VolunteerWhatHelps" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TSPPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="Id_Location" />
+          </Key>
+          <Property Name="Id_Location" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Refugees" Relationship="Self.FK_Refugee_Location" FromRole="Location" ToRole="Refugee" />
+          <NavigationProperty Name="Volunteers" Relationship="Self.FK_Volunteer_Location" FromRole="Location" ToRole="Volunteer" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="Id_News" />
+          </Key>
+          <Property Name="Id_News" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Headline" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Content" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Refugee">
+          <Key>
+            <PropertyRef Name="Id_Refugee" />
+          </Key>
+          <Property Name="Id_Refugee" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id_Location" Type="Int32" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Location" Relationship="Self.FK_Refugee_Location" FromRole="Refugee" ToRole="Location" />
+          <NavigationProperty Name="What_helps" Relationship="Self.RefugeeNeedWhatHelps" FromRole="Refugee" ToRole="What_helps" />
+        </EntityType>
+        <EntityType Name="Volunteer">
+          <Key>
+            <PropertyRef Name="Id_Volunteer" />
+          </Key>
+          <Property Name="Id_Volunteer" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Id_Location" Type="Int32" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Phone" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Rating" Type="Double" />
+          <Property Name="Number_of_rating" Type="Int32" />
+          <NavigationProperty Name="Location" Relationship="Self.FK_Volunteer_Location" FromRole="Volunteer" ToRole="Location" />
+          <NavigationProperty Name="What_helps" Relationship="Self.VolunteerWhatHelps" FromRole="Volunteer" ToRole="What_helps" />
+        </EntityType>
+        <EntityType Name="What_helps">
+          <Key>
+            <PropertyRef Name="Id_What_helps" />
+          </Key>
+          <Property Name="Id_What_helps" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Type_of_help" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Refugees" Relationship="Self.RefugeeNeedWhatHelps" FromRole="What_helps" ToRole="Refugee" />
+          <NavigationProperty Name="Volunteers" Relationship="Self.VolunteerWhatHelps" FromRole="What_helps" ToRole="Volunteer" />
+        </EntityType>
+        <Association Name="FK_Refugee_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="1" />
+          <End Role="Refugee" Type="Self.Refugee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id_Location" />
+            </Principal>
+            <Dependent Role="Refugee">
+              <PropertyRef Name="Id_Location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Volunteer_Location">
+          <End Role="Location" Type="Self.Location" Multiplicity="0..1" />
+          <End Role="Volunteer" Type="Self.Volunteer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Location">
+              <PropertyRef Name="Id_Location" />
+            </Principal>
+            <Dependent Role="Volunteer">
+              <PropertyRef Name="Id_Location" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RefugeeNeedWhatHelps">
+          <End Role="Refugee" Type="Self.Refugee" Multiplicity="*" />
+          <End Role="What_helps" Type="Self.What_helps" Multiplicity="*" />
+        </Association>
+        <Association Name="VolunteerWhatHelps">
+          <End Role="Volunteer" Type="Self.Volunteer" Multiplicity="*" />
+          <End Role="What_helps" Type="Self.What_helps" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="VolunteerHelpEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Locations" EntityType="Self.Location" />
+          <EntitySet Name="News" EntityType="Self.News" />
+          <EntitySet Name="Refugees" EntityType="Self.Refugee" />
+          <EntitySet Name="Volunteers" EntityType="Self.Volunteer" />
+          <EntitySet Name="What_helps" EntityType="Self.What_helps" />
+          <AssociationSet Name="FK_Refugee_Location" Association="Self.FK_Refugee_Location">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Refugee" EntitySet="Refugees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Volunteer_Location" Association="Self.FK_Volunteer_Location">
+            <End Role="Location" EntitySet="Locations" />
+            <End Role="Volunteer" EntitySet="Volunteers" />
+          </AssociationSet>
+          <AssociationSet Name="RefugeeNeedWhatHelps" Association="Self.RefugeeNeedWhatHelps">
+            <End Role="Refugee" EntitySet="Refugees" />
+            <End Role="What_helps" EntitySet="What_helps" />
+          </AssociationSet>
+          <AssociationSet Name="VolunteerWhatHelps" Association="Self.VolunteerWhatHelps">
+            <End Role="Volunteer" EntitySet="Volunteers" />
+            <End Role="What_helps" EntitySet="What_helps" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TSPPModelStoreContainer" CdmEntityContainer="VolunteerHelpEntities">
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="TSPPModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="Id_Location" ColumnName="Id_Location" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="TSPPModel.News">
+              <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="Id_News" ColumnName="Id_News" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Headline" ColumnName="Headline" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Refugees">
+            <EntityTypeMapping TypeName="TSPPModel.Refugee">
+              <MappingFragment StoreEntitySet="Refugee">
+                <ScalarProperty Name="Id_Refugee" ColumnName="Id_Refugee" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Id_Location" ColumnName="Id_Location" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Volunteers">
+            <EntityTypeMapping TypeName="TSPPModel.Volunteer">
+              <MappingFragment StoreEntitySet="Volunteer">
+                <ScalarProperty Name="Id_Volunteer" ColumnName="Id_Volunteer" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Id_Location" ColumnName="Id_Location" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="Number_of_rating" ColumnName="Number_of_rating" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="What_helps">
+            <EntityTypeMapping TypeName="TSPPModel.What_helps">
+              <MappingFragment StoreEntitySet="What_helps">
+                <ScalarProperty Name="Id_What_helps" ColumnName="Id_What_helps" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Type_of_help" ColumnName="Type_of_help" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="RefugeeNeedWhatHelps" TypeName="TSPPModel.RefugeeNeedWhatHelps" StoreEntitySet="RefugeeNeedWhatHelps">
+            <EndProperty Name="Refugee">
+              <ScalarProperty Name="Id_Refugee" ColumnName="Id_Refugee" />
+            </EndProperty>
+            <EndProperty Name="What_helps">
+              <ScalarProperty Name="Id_What_helps" ColumnName="Id_What_helps" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="VolunteerWhatHelps" TypeName="TSPPModel.VolunteerWhatHelps" StoreEntitySet="VolunteerWhatHelps">
+            <EndProperty Name="Volunteer">
+              <ScalarProperty Name="Id_Volunteer" ColumnName="Id_Volunteer" />
+            </EndProperty>
+            <EndProperty Name="What_helps">
+              <ScalarProperty Name="Id_What_helps" ColumnName="Id_What_helps" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

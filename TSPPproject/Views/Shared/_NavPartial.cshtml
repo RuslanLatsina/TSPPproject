@@ -1,0 +1,27 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav">
+
+            <li>@Html.ActionLink("Новини", "Index", "Home")</li>
+            <li>@Html.ActionLink("Волонтери", "Index", "Volunteers")</li>
+            <li>@Html.ActionLink("Постраждалі особи", "Index", "Refugees")</li>
+            <li>@Html.ActionLink("Відомості про проект", "About", "Home")</li>
+            <li>@Html.ActionLink("Контакти", "Contact", "Home")</li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Новини", "Index", "Home")</li>
+        <li>@Html.ActionLink("Волонтери", "Index", "Volunteers")</li>
+        <li>@Html.ActionLink("Відомості про проект", "About", "Home")</li>
+        <li>@Html.ActionLink("Контакти", "Contact", "Home")</li>
+    </ul>
+}
+

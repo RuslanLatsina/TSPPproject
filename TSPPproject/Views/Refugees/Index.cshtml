@@ -1,0 +1,154 @@
+﻿@model PagedList.IPagedList<TSPPproject.Models.Refugee>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Особи, які потребують допомоги</h2>
+
+@if (Request.IsAuthenticated)
+{
+    <p>
+        @Html.ActionLink("Добавити особу", "Create")
+    </p>
+    using (Html.BeginForm("Index", "Refugees", FormMethod.Get))
+    {
+        <p>
+            Пошук по імені: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>Ім'я</th>
+            <th>@Html.ActionLink("Прізвище", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+            <th>Телефон</th>
+            <th>Email</th>
+            <th>Допомогу потребує?</th>
+            <th>@Html.ActionLink("Розташуванння", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+
+
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @*<ul>
+                            @foreach (var help in item.What_helps)
+                            {
+                                <li>@help.Name</li>
+                            }
+                        </ul>*@
+                    @{
+                        foreach (var help in item.What_helps)
+                        {
+                            @help.Id_What_helps @: @help.Name <br />
+                    }
+                    }
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id_Refugee }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id_Refugee }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id_Refugee })
+                </td>
+            </tr>
+                        }
+
+    </table>
+                        }
+                        else
+                        {
+
+                            <p>
+                                @Html.ActionLink("Добавити особу", "Create")
+                            </p>
+                            using (Html.BeginForm("Index", "Refugees", FormMethod.Get))
+                            {
+                                <p>
+                                    Пошук по імені: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                                    <input type="submit" value="Search" />
+                                </p>
+                            }
+                            <table class="table">
+                                <tr>
+                                    <th>Ім'я</th>
+                                    <th>@Html.ActionLink("Прізвище", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                                    <th>Телефон</th>
+                                    <th>Email</th>
+                                    <th>Допомогу потребує?</th>
+                                    <th>@Html.ActionLink("Розташуванння", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+
+
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FirstName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.LastName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Phone)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                        <td>
+                                            @*<ul>
+                                                    @foreach (var help in item.What_helps)
+                                                    {
+                                                        <li>@help.Name</li>
+                                                    }
+                                                </ul>*@
+                                            @{
+                                                foreach (var help in item.What_helps)
+                                                {
+                                                    @help.Id_What_helps @: @help.Name <br />
+                    }
+                                            }
+
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Location.Name)
+                                        </td>
+                                        <td>
+
+                                            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id_Refugee }) |*@
+                                            @Html.ActionLink("Details", "Details", new { id = item.Id_Refugee }) |
+                                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id_Refugee })*@
+                                        </td>
+                                    </tr>
+                                                }
+
+                            </table>
+                                                }
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -1,0 +1,58 @@
+﻿@using TSPPproject.Models
+@model IEnumerable<TSPPproject.Models.News>
+@using Microsoft.AspNet.Identity
+
+
+
+
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="content">
+
+            <div class="row">
+                <h1>@Html.ActionLink("Добавити новину", "Create", new { @class = "btn btn-default" })</h1>
+                @foreach (var p in (List<News>)ViewData["items"])
+                {
+                    <div class="col-md-12">
+                        <h2>@Html.Raw(new HtmlString(p.Name))</h2>
+                        
+                        <p class="h4" style="margin-top:30px">
+                            @Html.Raw(new HtmlString(p.Headline))
+                        </p>
+                        @Html.ActionLink("Детальніше", "Page", "Home", new { id = p.Id_News }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Edit", "PageEdit", "Home", new { id = p.Id_News }, new { @class = "btn btn-default" })
+                        @Html.ActionLink("Delete", "Delete", "Home", new { id = p.Id_News }, new { @class = "btn btn-default" })
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="content">
+            <div class="row">
+                @*<h1>@Html.ActionLink("Create New", "Create", new { @class = "btn btn-default" })</h1>*@
+                @foreach (var p in (List<News>)ViewData["items"])
+                {
+                    <div class="col-md-12">
+                        <h2>@Html.Raw(new HtmlString(p.Name))</h2>
+                        
+                        <p class= "h4" style="margin-top:30px">
+                            @Html.Raw(new HtmlString(p.Headline))
+                        </p>
+                        @Html.ActionLink("Детальніше", "Page", "Home", new { id = p.Id_News }, new { @class = "btn btn-default" })
+
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}

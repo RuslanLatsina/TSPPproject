@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TSPPproject.Models.ViewModels.RefugeeCountGroup>
+
+@{
+    ViewBag.Title = "Student Body Statistics";
+}
+
+<h3>Розподіл постраждалих осіб по областях</h3>
+
+<table class="table">
+    <tr>
+        <th>Розташування </th>
+        <th>Кількість постраждалих</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @item.RefugeeCount
+            </td>
+        </tr>
+    }
+</table>

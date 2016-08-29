@@ -1,0 +1,49 @@
+﻿
+@using Microsoft.AspNet.Identity
+
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="content">
+
+
+            <div class="text-center">
+                
+            </div>
+            <article class="article">
+
+                <div class="text-left">
+                    <h1 class="text-success">@Html.Raw(new HtmlString(Model.Name))</h1>
+                    @Html.Raw(new HtmlString(Model.Content))
+                </div>
+            </article>
+
+
+
+        </div>
+
+
+
+    }
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="content">
+            <article class="article">
+                <div class="text-center">
+                    
+                </div>
+                <div class="text-left">
+                    <h3 class="">@Html.Raw(new HtmlString(Model.Name))</h3>
+                    @Html.Raw(new HtmlString(Model.Content))
+                </div>
+            </article>
+        </div>
+    }
+}

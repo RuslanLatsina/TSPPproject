@@ -1,0 +1,488 @@
+﻿@model TSPPproject.Models.ViewModels.VolunteerViewModel
+
+@{
+    ViewBag.Title = "Волонтери";
+}
+
+<h2>Волонтери</h2>
+
+
+@if (Request.IsAuthenticated)
+{
+
+
+    <p>
+        @Html.ActionLink("Добавити волонтера", "Create")
+    </p>
+
+    using (Html.BeginForm())
+    {
+        <p>
+            Виберіть облсать: @Html.DropDownList("selectedLocation", "All")
+            <input type="submit" value="Filter" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>@Html.ActionLink("Назва ", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+            <th>Опис</th>
+            <th>Телефон</th>
+            <th>Адреса</th>
+            <th>Email</th>
+            <th>Допомагає</th>
+            <th>Розташування</th>
+            <th>@Html.ActionLink("Оцінка", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Volunteers)
+        {
+            string selectedRow = "";
+            if (item.Id_Volunteer == ViewBag.Id_Volunteer)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @*<ul>
+                            @foreach (var help in item.What_helps)
+                            {
+                                <li>@help.Name</li>
+                            }
+                        </ul>*@
+                    @{
+                        foreach (var help in item.What_helps)
+                        {
+                            @help.Id_What_helps @: @help.Name <br />
+                    }
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+
+
+                <td>
+                    @Html.ActionLink("Перегляд допомог", "Index", new { id = item.Id_Volunteer }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id_Volunteer }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id_Volunteer }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id_Volunteer })
+                </td>
+            </tr>
+                        }
+
+    </table>
+
+    if (Model.WhatHelpses != null)
+    {
+        <h3>Перелік допомог для вибраного волонтера</h3>
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>№</th>
+                <th>Назва</th>
+                <th>Тип</th>
+            </tr>
+
+            @foreach (var item in Model.WhatHelpses)
+            {
+                string selectedRow = "";
+                if (item.Id_What_helps == ViewBag.CourseID)
+                {
+                    selectedRow = "success";
+                }
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.ActionLink("Хто потребує?", "Index", new { courseID = item.Id_What_helps })
+                    </td>
+                    <td>
+                        @item.Id_What_helps
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Type_of_help
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+
+                        if (Model.Refugees != null)
+                        {
+                            <h3>
+                                Перегляд людей, які потребують власне цю допомогу, та виставлення їх у порядку близькості до розташування волотнера
+                            </h3>
+                            <table class="table">
+                                <tr>
+                                    <th>Прізвище</th>
+                                    <th>І'мя</th>
+                                    <th>Розташування</th>
+                                    <th>Телефон</th>
+                                    <th>Email</th>
+                                </tr>
+                                @foreach (var item in Model.Refugees)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.LastName
+                                        </td>
+                                        <td>
+                                            @item.FirstName
+                                        </td>
+                                        <td>
+                                            @item.Location.Name
+                                        </td>
+                                        <td>
+                                            @item.Phone
+                                        </td>
+                                        <td>
+                                            @item.Email
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                            }
+                        }
+                        else
+                        {
+
+
+
+                            @*<p>
+                                @Html.ActionLink("Добавити волонтера", "Create")
+                            </p>*@
+
+                            using (Html.BeginForm())
+                            {
+                                <p>
+                                    Виберіть облсать: @Html.DropDownList("selectedLocation", "All")
+                                    <input type="submit" value="Filter" />
+                                </p>
+                            }
+                            <table class="table">
+                                <tr>
+                                    <th>@Html.ActionLink("Назва ", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                                    <th>Опис</th>
+                                    <th>Телефон</th>
+                                    <th>Адреса</th>
+                                    <th>Email</th>
+                                    <th>Допомагає</th>
+                                    <th>Розташування</th>
+                                    <th>@Html.ActionLink("Оцінка", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model.Volunteers)
+                                {
+                                    string selectedRow = "";
+                                    if (item.Id_Volunteer == ViewBag.Id_Volunteer)
+                                    {
+                                        selectedRow = "success";
+                                    }
+                                    <tr class="@selectedRow">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Phone)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Address)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Email)
+                                        </td>
+                                        <td>
+                                            @*<ul>
+                                                    @foreach (var help in item.What_helps)
+                                                    {
+                                                        <li>@help.Name</li>
+                                                    }
+                                                </ul>*@
+                                            @{
+                                                foreach (var help in item.What_helps)
+                                                {
+                                                    @help.Id_What_helps @: @help.Name <br />
+                    }
+                                            }
+
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Location.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Rating)
+                                        </td>
+
+
+                                        <td>
+                                            @Html.ActionLink("Перегляд допомог", "Index", new { id = item.Id_Volunteer }) |
+                                            @*@Html.ActionLink("Edit", "Edit", new { id = item.Id_Volunteer }) |*@
+                                            @Html.ActionLink("Details", "Details", new { id = item.Id_Volunteer }) |
+                                            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id_Volunteer })*@
+                                        </td>
+                                    </tr>
+                                                }
+
+                            </table>
+
+                            if (Model.WhatHelpses != null)
+                            {
+                                <h3>Перелік допомог для вибраного волонтера</h3>
+                                <table class="table">
+                                    <tr>
+                                        <th></th>
+                                        <th>№</th>
+                                        <th>Назва</th>
+                                        <th>Тип</th>
+                                    </tr>
+
+                                    @foreach (var item in Model.WhatHelpses)
+                                    {
+                                        string selectedRow = "";
+                                        if (item.Id_What_helps == ViewBag.CourseID)
+                                        {
+                                            selectedRow = "success";
+                                        }
+                                        <tr class="@selectedRow">
+                                            <td>
+                                                @Html.ActionLink("Хто потребує?", "Index", new { courseID = item.Id_What_helps })
+                                            </td>
+                                            <td>
+                                                @item.Id_What_helps
+                                            </td>
+                                            <td>
+                                                @item.Name
+                                            </td>
+                                            <td>
+                                                @item.Type_of_help
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            }
+
+                                                if (Model.Refugees != null)
+                                                {
+                                                    <h3>
+                                                        Перегляд людей, які потребують власне цю допомогу, та виставлення їх у порядку близькості до розташування волотнера
+                                                    </h3>
+                                                    <table class="table">
+                                                        <tr>
+                                                            <th>Прізвище</th>
+                                                            <th>І'мя</th>
+                                                            <th>Розташування</th>
+                                                            <th>Телефон</th>
+                                                            <th>Email</th>
+                                                        </tr>
+                                                        @foreach (var item in Model.Refugees)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @item.LastName
+                                                                </td>
+                                                                <td>
+                                                                    @item.FirstName
+                                                                </td>
+                                                                <td>
+                                                                    @item.Location.Name
+                                                                </td>
+                                                                <td>
+                                                                    @item.Phone
+                                                                </td>
+                                                                <td>
+                                                                    @item.Email
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                }
+                                                }
+
+
+@*
+
+    <p>
+        @Html.ActionLink("Добавити волонтера", "Create")
+    </p>
+
+    @using (Html.BeginForm())
+    {
+        <p>
+             Виберіть облсать: @Html.DropDownList("selectedLocation", "All")
+            <input type="submit" value="Filter" />
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>@Html.ActionLink("Назва ", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+            <th>Опис</th>
+            <th>Телефон</th>
+            <th>Адреса</th>
+            <th>Email</th>
+            <th>Допомагає</th>
+            <th>Розташування</th>
+            <th>@Html.ActionLink("Оцінка", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+
+            <th></th>
+        </tr>
+        @foreach (var item in Model.Volunteers)
+        {
+            string selectedRow = "";
+            if (item.Id_Volunteer == ViewBag.Id_Volunteer)
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <ul>
+                            @foreach (var help in item.What_helps)
+                            {
+                                <li>@help.Name</li>
+                            }
+                        </ul>
+                    @{
+                        foreach (var help in item.What_helps)
+                        {
+                            @help.Id_What_helps @: @help.Name <br />
+                        }
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+
+
+                <td>
+                    @Html.ActionLink("Перегляд допомог", "Index", new { id = item.Id_Volunteer }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id_Volunteer }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id_Volunteer }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id_Volunteer })
+                </td>
+            </tr>
+                        }
+
+    </table>
+
+    @if (Model.WhatHelpses != null)
+    {
+        <h3>Перелік допомог для вибраного волонтера</h3>
+        <table class="table">
+            <tr>
+                <th></th>
+                <th>№</th>
+                <th>Назва</th>
+                <th>Тип</th>
+            </tr>
+
+            @foreach (var item in Model.WhatHelpses)
+            {
+                string selectedRow = "";
+                if (item.Id_What_helps == ViewBag.CourseID)
+                {
+                    selectedRow = "success";
+                }
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.ActionLink("Хто потребує?", "Index", new { courseID = item.Id_What_helps })
+                    </td>
+                    <td>
+                        @item.Id_What_helps
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Type_of_help
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+
+    @if (Model.Refugees != null)
+    {
+        <h3>
+            Перегляд людей, які потребують власне цю допомогу, та виставлення їх у порядку близькості до розташування волотнера
+        </h3>
+        <table class="table">
+            <tr>
+                <th>Прізвище</th>
+                <th>І'мя</th>
+                <th>Розташування</th>
+                <th>Телефон</th>
+                <th>Email</th>
+            </tr>
+            @foreach (var item in Model.Refugees)
+            {
+                <tr>
+                    <td>
+                        @item.LastName
+                    </td>
+                    <td>
+                        @item.FirstName
+                    </td>
+                    <td>
+                        @item.Location.Name
+                    </td>
+                    <td>
+                        @item.Phone
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
+*@
